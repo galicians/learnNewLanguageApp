@@ -21,6 +21,10 @@ describe("A study session", function() {
 		expect(session.roundAnswers).toBeDefined()
 	})
 
+	it("needs score to be defined", function() {
+		expect(session.score).toBeDefined()
+	})
+
 	it("should accept words", function() {
 		expect(session.words).toBe(words)
 	})
@@ -72,5 +76,31 @@ describe("A study session", function() {
 		expect(session.roundAnswers).toContain(session.correctResponse())
 	})
 
+	it("provides the current round", function() {
+		session.generateNewQuestion()
+		expect(session.currentRound()).toEqual(1)
+	})
+
+	it("knows when the user response is correct", function() {
+		session.questions.push(0)
+		expect(session.isUserResponseCorrect('Buenos días')).toBeTruthy()
+	})
+
+	it("the number of points per correct answer can be modified between rounds", function() {
+		session.roundPoints = 5
+		expect(session.roundPoints).toEqual(5)
+	})
+
+	it("keeps the count of the points per round on score", function() {
+		session.roundPoints = 5
+		session.questions.push(1)
+		session.updateScore('Buenos días')
+		expect(session.score[0]).toEqual(5)
+	})
+
+	it("provides the keyphrase of the current question", function() {
+		session.questions.push(1)
+		expect(session.getKeyphrase()).toEqual("A conventional expression of greeting or farewell used in the morning.")
+	})
 
 })

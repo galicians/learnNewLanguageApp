@@ -5,7 +5,8 @@ function Session() {
   this.learning
   this.mTongue
   this.user
-  this.score
+  this.score = []
+  this.roundPoints
 }
 
 Session.prototype._generateRandNumber =  function() {
@@ -25,8 +26,8 @@ Session.prototype._isQuestionRepeated = function(num) {
 }
 
 Session.prototype.currentQuestion = function() {
-  var index = this.questions.length - 1
-  return words[index]
+  var last = this.questions.length - 1
+  return words[last]
 }
 
 Session.prototype.correctResponse = function() {
@@ -51,6 +52,23 @@ Session.prototype.generateAnswers = function(num) {
 Session.prototype.shuffleAnswers = function(){
     this.roundAnswers = shuffle(this.roundAnswers)
 }
+
+Session.prototype.currentRound = function() {
+  return this.questions.length
+}
+
+Session.prototype.isUserResponseCorrect = function(userAnswer){
+  return userAnswer == this.correctResponse()
+}
+
+Session.prototype.updateScore = function(userAnswer) {
+  if (this.isUserResponseCorrect(userAnswer)) this.score.push(this.roundPoints)
+}
+
+Session.prototype.getKeyphrase = function(){
+  return this.currentQuestion().def
+}
+
 //Array.prototype ??
 function shuffle(array) {
     for (var i = array.length - 1; i > 0; i--) { 
